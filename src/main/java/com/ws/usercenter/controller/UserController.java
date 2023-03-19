@@ -60,6 +60,19 @@ public class UserController {
 
     }
 
+    @GetMapping("/current")
+    public User getCurrentUser(HttpServletRequest request) {
+
+        Object attribute = request.getSession().getAttribute(USER_LOGIN_STATE);
+        User currentUser = (User) attribute;
+        if (currentUser == null) {
+            return null;
+        }
+        Long userId = currentUser.getId();
+        User byId = userService.getById(userId);
+        return userService.getSafeUser(byId);
+    }
+
     @GetMapping("/search")
     public List<User> searchUser(String username, HttpServletRequest request) {
         if (!isAdmin(request)) {

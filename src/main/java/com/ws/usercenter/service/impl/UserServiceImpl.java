@@ -51,7 +51,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
         String validPattern = "[`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";
         Matcher matcher = Pattern.compile(validPattern).matcher(userAccount);
-        if (!matcher.find()) {
+        if (matcher.find()) {
             return -1;
         }
         if (!userPassword.equals(checkPassword)) {
@@ -69,7 +69,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         String encryptPassword = DigestUtils.md5DigestAsHex((SALT + userPassword).getBytes());
         User user = new User();
         user.setUserAccount(userAccount);
-        user.setUserPassword(userPassword);
+        user.setUserPassword(encryptPassword);
 
         boolean save = this.save(user);
         if (!save) {
@@ -93,7 +93,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
         String validPattern = "[`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";
         Matcher matcher = Pattern.compile(validPattern).matcher(userAccount);
-        if (!matcher.find()) {
+        if (matcher.find()) {
             return null;
         }
         //对密码进行加密
@@ -119,12 +119,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     /**
      * 用户脱敏
+     *
      * @param OriginalUser
      * @return
      */
     @Override
     public User getSafeUser(User OriginalUser) {
-
+        if (OriginalUser == null) {
+            return null;
+        }
         User securityUser = new User();
         securityUser.setId(OriginalUser.getId());
         securityUser.setUserAccount(OriginalUser.getUserAccount());

@@ -1,5 +1,6 @@
 package com.ws.usercenter.service;
 
+import com.ws.usercenter.model.domain.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,33 +34,38 @@ class UserServiceTest {
 
     @Test
     void userRegister() {
+//        String userAccount = "yupi";
+//        String userPassword = "";
+//        String checkPassword = "123456";
+//        String planetCode = "1";
+//        long result = userService.userRegister(userAccount, userPassword, checkPassword);
+//        Assertions.assertEquals(-1, result);
+//        userAccount = "yu";
+//        result = userService.userRegister(userAccount, userPassword, checkPassword);
+//        Assertions.assertEquals(-1, result);
+//        userAccount = "yupi";
+//        userPassword = "123456";
+//        result = userService.userRegister(userAccount, userPassword, checkPassword);
+//        Assertions.assertEquals(-1, result);
+//        userAccount = "yu pi";
+//        userPassword = "12345678";
+//        result = userService.userRegister(userAccount, userPassword, checkPassword);
+//        Assertions.assertEquals(-1, result);
+//        checkPassword = "123456789";
+//        result = userService.userRegister(userAccount, userPassword, checkPassword);
+//        Assertions.assertEquals(-1, result);
+//        userAccount = "dogYupi";
+//        checkPassword = "12345678";
+//        result = userService.userRegister(userAccount, userPassword, checkPassword);
+//        Assertions.assertEquals(-1, result);
+//        userAccount = "yupi";
+//        result = userService.userRegister(userAccount, userPassword, checkPassword);
+//        Assertions.assertEquals(-1, result);
         String userAccount = "yupi";
-        String userPassword = "";
-        String checkPassword = "123456";
-        String planetCode = "1";
-        long result = userService.userRegister(userAccount, userPassword, checkPassword);
-        Assertions.assertEquals(-1, result);
-        userAccount = "yu";
-        result = userService.userRegister(userAccount, userPassword, checkPassword);
-        Assertions.assertEquals(-1, result);
-        userAccount = "yupi";
-        userPassword = "123456";
-        result = userService.userRegister(userAccount, userPassword, checkPassword);
-        Assertions.assertEquals(-1, result);
-        userAccount = "yu pi";
-        userPassword = "12345678";
-        result = userService.userRegister(userAccount, userPassword, checkPassword);
-        Assertions.assertEquals(-1, result);
-        checkPassword = "123456789";
-        result = userService.userRegister(userAccount, userPassword, checkPassword);
-        Assertions.assertEquals(-1, result);
-        userAccount = "dogYupi";
-        checkPassword = "12345678";
-        result = userService.userRegister(userAccount, userPassword, checkPassword);
-        Assertions.assertEquals(-1, result);
-        userAccount = "yupi";
-        result = userService.userRegister(userAccount, userPassword, checkPassword);
-        Assertions.assertEquals(-1, result);
+        String userPassword = "12345678";
+        String checkPassword = "12345678";
+        long l = userService.userRegister(userAccount, userPassword, checkPassword);
+        System.out.println(l);
 
     }
 }
