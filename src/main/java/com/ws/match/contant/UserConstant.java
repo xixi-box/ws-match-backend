@@ -1,4 +1,4 @@
-package com.ws.usercenter.contant;
+package com.ws.match.contant;
 
 /**
  * @author 王顺

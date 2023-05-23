@@ -1,4 +1,4 @@
-package com.ws.usercenter.common;
+package com.ws.match.common;
 
 import lombok.Data;
 

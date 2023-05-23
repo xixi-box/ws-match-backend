@@ -1,6 +1,6 @@
-package com.ws.usercenter.service;
+package com.ws.match.service;
 
-import com.ws.usercenter.model.domain.User;
+import com.ws.match.model.domain.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,25 +1,24 @@
-package com.ws.usercenter.controller;
+package com.ws.match.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.ws.usercenter.common.BaseResponse;
-import com.ws.usercenter.common.ErrorCode;
-import com.ws.usercenter.common.ResultUtils;
-import com.ws.usercenter.exception.BusinessException;
-import com.ws.usercenter.model.domain.User;
-import com.ws.usercenter.model.domain.request.UserLoginRequest;
-import com.ws.usercenter.model.domain.request.UserRegisterRequest;
-import com.ws.usercenter.service.UserService;
+import com.ws.match.common.BaseResponse;
+import com.ws.match.common.ErrorCode;
+import com.ws.match.common.ResultUtils;
+import com.ws.match.exception.BusinessException;
+import com.ws.match.model.domain.User;
+import com.ws.match.model.request.UserLoginRequest;
+import com.ws.match.model.request.UserRegisterRequest;
+import com.ws.match.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.ws.usercenter.contant.UserConstant.ADMIN_ROLE;
-import static com.ws.usercenter.contant.UserConstant.USER_LOGIN_STATE;
+import static com.ws.match.contant.UserConstant.ADMIN_ROLE;
+import static com.ws.match.contant.UserConstant.USER_LOGIN_STATE;
 
 /**
  * @author 王顺

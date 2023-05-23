@@ -1,7 +1,7 @@
-package com.ws.usercenter.mapper;
+package com.ws.match.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.ws.usercenter.model.domain.User;
+import com.ws.match.model.domain.User;
 
 /**
 * @author 26062

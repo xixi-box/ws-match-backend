@@ -1,8 +1,8 @@
-package com.ws.usercenter.exception;
+package com.ws.match.exception;
 
-import com.ws.usercenter.common.BaseResponse;
-import com.ws.usercenter.common.ErrorCode;
-import com.ws.usercenter.common.ResultUtils;
+import com.ws.match.common.BaseResponse;
+import com.ws.match.common.ErrorCode;
+import com.ws.match.common.ResultUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

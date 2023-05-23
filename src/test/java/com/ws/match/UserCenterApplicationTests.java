@@ -1,4 +1,4 @@
-package com.ws.usercenter;
+package com.ws.match;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

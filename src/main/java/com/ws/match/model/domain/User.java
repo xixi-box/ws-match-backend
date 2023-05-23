@@ -1,4 +1,4 @@
-package com.ws.usercenter.model.domain;
+package com.ws.match.model.domain;
 
 import com.baomidou.mybatisplus.annotation.*;
 
@@ -50,6 +50,11 @@ public class User implements Serializable {
      * 邮箱
      */
     private String email;
+    /**
+     * 标签列表 json
+     */
+    private String tags;
+
 
     /**
      * 状态

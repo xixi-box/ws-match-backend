@@ -1,13 +1,13 @@
-package com.ws.usercenter.service.impl;
+package com.ws.match.service.impl;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.ws.usercenter.common.ErrorCode;
-import com.ws.usercenter.exception.BusinessException;
-import com.ws.usercenter.mapper.UserMapper;
-import com.ws.usercenter.model.domain.User;
-import com.ws.usercenter.service.UserService;
+import com.ws.match.common.ErrorCode;
+import com.ws.match.exception.BusinessException;
+import com.ws.match.mapper.UserMapper;
+import com.ws.match.model.domain.User;
+import com.ws.match.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,7 @@ import javax.servlet.http.HttpSession;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.ws.usercenter.contant.UserConstant.USER_LOGIN_STATE;
+import static com.ws.match.contant.UserConstant.USER_LOGIN_STATE;
 
 /**
  * @author 26062

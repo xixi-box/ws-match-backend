@@ -1,8 +1,8 @@
-package com.ws.usercenter.service;
+package com.ws.match.service;
 
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.ws.usercenter.model.domain.User;
+import com.ws.match.model.domain.User;
 
 import javax.servlet.http.HttpServletRequest;
 

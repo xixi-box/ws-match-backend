@@ -1,6 +1,6 @@
-package com.ws.usercenter.exception;
+package com.ws.match.exception;
 
-import com.ws.usercenter.common.ErrorCode;
+import com.ws.match.common.ErrorCode;
 
 /**
  * @author 王顺
