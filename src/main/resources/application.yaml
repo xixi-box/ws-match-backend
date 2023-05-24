@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: dev
   application:
     name: user-center
   datasource:
@@ -9,6 +11,11 @@ spring:
     #失效时间是1天
   session:
     timeout: 86400
+    #配置Swagger的策略
+  mvc:
+    path match:
+      matching-strategy: ant_path_matcher
+
 server:
   port: 8080
   servlet:
