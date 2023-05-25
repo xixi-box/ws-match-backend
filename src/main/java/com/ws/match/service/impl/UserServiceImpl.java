@@ -3,6 +3,8 @@ package com.ws.match.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.ws.match.common.ErrorCode;
 import com.ws.match.exception.BusinessException;
 import com.ws.match.mapper.UserMapper;
@@ -11,13 +13,16 @@ import com.ws.match.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static com.ws.match.contant.UserConstant.USER_LOGIN_STATE;
 
@@ -142,7 +147,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         securityUser.setUpdateTime(OriginalUser.getUpdateTime());
         securityUser.setUsername(OriginalUser.getUsername());
         securityUser.setUserRole(OriginalUser.getUserRole());
-
+        securityUser.setTags(OriginalUser.getTags());
         return securityUser;
     }
 
@@ -155,6 +160,35 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     public int userLogout(HttpServletRequest request) {
         request.getSession().removeAttribute(USER_LOGIN_STATE);
         return 0;
+    }
+
+    /**
+     * 根据标签搜索用户
+     *
+     * @return
+     */
+    @Override
+    public List<User> searchUsersByTags(List<String> tagNameList) {
+        if (CollectionUtils.isEmpty(tagNameList)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        // 1. 先查询所有用户
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        List<User> userList = userMapper.selectList(queryWrapper);
+        Gson gson = new Gson();
+        // 2. 在内存中判断是否包含要求的标签
+        return userList.stream().filter(user -> {
+            String tagsStr = user.getTags();
+            Set<String> tempTagNameSet = gson.fromJson(tagsStr, new TypeToken<Set<String>>() {
+            }.getType());
+            tempTagNameSet = Optional.ofNullable(tempTagNameSet).orElse(new HashSet<>());
+            for (String tagName : tagNameList) {
+                if (!tempTagNameSet.contains(tagName)) {
+                    return false;
+                }
+            }
+            return true;
+        }).map(this::getSafeUser).collect(Collectors.toList());
     }
 }
 

@@ -10,6 +10,7 @@ import com.ws.match.model.request.UserLoginRequest;
 import com.ws.match.model.request.UserRegisterRequest;
 import com.ws.match.service.UserService;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -27,6 +28,7 @@ import static com.ws.match.contant.UserConstant.USER_LOGIN_STATE;
  */
 @RestController
 @RequestMapping("/user")
+@CrossOrigin()
 public class UserController {
 
     @Resource
@@ -102,6 +104,15 @@ public class UserController {
         }
         List<User> list = userService.list(userQueryWrapper);
         List<User> userList = list.stream().map(user -> userService.getSafeUser(user)).collect(Collectors.toList());
+        return ResultUtils.success(userList);
+    }
+
+    @GetMapping("/search/tags")
+    public BaseResponse<List<User>> searchUsersByTags(@RequestParam(required = false) List<String> tagNameList) {
+        if (CollectionUtils.isEmpty(tagNameList)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        List<User> userList = userService.searchUsersByTags(tagNameList);
         return ResultUtils.success(userList);
     }
 
