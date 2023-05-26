@@ -12,14 +12,22 @@ spring:
   session:
     timeout: 86400
     #配置Swagger的策略
+    store-type: redis
   mvc:
     path match:
       matching-strategy: ant_path_matcher
-
+  redis:
+    port: 6379
+    host: 192.168.200.135
+    database: 0
+    password: 'ws'
 server:
   port: 8080
   servlet:
     context-path: /api
+    session:
+      cookie:
+        domain:
 mybatis-plus:
   configuration:
     map-underscore-to-camel-case: false
