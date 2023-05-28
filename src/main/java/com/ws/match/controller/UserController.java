@@ -28,7 +28,8 @@ import static com.ws.match.contant.UserConstant.USER_LOGIN_STATE;
  */
 @RestController
 @RequestMapping("/user")
-@CrossOrigin()
+@CrossOrigin(origins = {"http://localhost:5173"})
+
 public class UserController {
 
     @Resource
@@ -139,6 +140,4 @@ public class UserController {
         boolean b = userService.removeById(id);
         return ResultUtils.success(b);
     }
-
-
 }

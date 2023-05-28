@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication
 @MapperScan("com.ws.match.mapper")
+
 public class MatchApplication {
 
     public static void main(String[] args) {
