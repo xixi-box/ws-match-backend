@@ -27,11 +27,7 @@ server:
     context-path: /api
     session:
       cookie:
-        domain:
-
-        #共享cokkie 把cokkie的作用域提高到了域名层级
-  #        secure: true
-
+        domain: 127.0.0.1
 mybatis-plus:
   configuration:
     map-underscore-to-camel-case: false

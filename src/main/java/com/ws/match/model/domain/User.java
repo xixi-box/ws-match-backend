@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.*;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
 import lombok.Data;
 
@@ -90,4 +91,16 @@ public class User implements Serializable {
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(userAccount, user.userAccount) && Objects.equals(avatarUrl, user.avatarUrl) && Objects.equals(gender, user.gender) && Objects.equals(userPassword, user.userPassword) && Objects.equals(phone, user.phone) && Objects.equals(email, user.email) && Objects.equals(tags, user.tags) && Objects.equals(userStatus, user.userStatus) && Objects.equals(createTime, user.createTime) && Objects.equals(updateTime, user.updateTime) && Objects.equals(isDelete, user.isDelete) && Objects.equals(username, user.username) && Objects.equals(userRole, user.userRole);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userAccount, avatarUrl, gender, userPassword, phone, email, tags, userStatus, createTime, updateTime, isDelete, username, userRole);
+    }
 }

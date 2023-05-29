@@ -18,8 +18,10 @@ import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -120,8 +122,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         //用户脱敏
         User securityUser = getSafeUser(user);
         //记录用户信息
-        HttpSession session = request.getSession();
-        session.setAttribute(USER_LOGIN_STATE, securityUser);
+        request.getSession().setAttribute(USER_LOGIN_STATE, securityUser);
         return securityUser;
     }
 
@@ -205,7 +206,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
 
-        // todo 补充校验，如果用户没有传任何要更新的值，就直接报错，不用执行 update 语句
+        //  补充校验，如果用户没有传任何要更新的值，就直接报错，不用执行 update 语句
+        if (user.equals(loginUser)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
         // 如果是管理员，允许更新任意用户
         // 如果不是管理员，只允许更新当前（自己的）信息
         if (!isAdmin(loginUser) && userId != loginUser.getId()) {
@@ -248,6 +252,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return user != null && user.getUserRole() == ADMIN_ROLE;
     }
 
+    /**
+     * @param loginUser
+     * @return
+     * @description 是否为管理员
+     */
     @Override
     public boolean isAdmin(User loginUser) {
         return loginUser != null && loginUser.getUserRole() == ADMIN_ROLE;
