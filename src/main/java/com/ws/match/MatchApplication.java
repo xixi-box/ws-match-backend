@@ -10,7 +10,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  */
 @SpringBootApplication
 @MapperScan("com.ws.match.mapper")
-@EnableScheduling/*任务调度*/
+@EnableScheduling/*任务调度，定时任务*/
 public class MatchApplication {
 
     public static void main(String[] args) {
