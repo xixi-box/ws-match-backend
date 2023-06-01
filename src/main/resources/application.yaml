@@ -19,7 +19,8 @@ spring:
   redis:
     port: 6379
     host: 192.168.200.136
-    database: 0
+    database: 1
+    #由于有密码的存在每次进行数据库连接都要设置密码
     password: 'ws'
 server:
   port: 8080

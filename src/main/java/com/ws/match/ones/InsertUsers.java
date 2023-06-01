@@ -2,8 +2,6 @@ package com.ws.match.ones;
 
 import com.ws.match.mapper.UserMapper;
 import com.ws.match.model.domain.User;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 
 import javax.annotation.Resource;
