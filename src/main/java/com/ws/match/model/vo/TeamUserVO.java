@@ -1,25 +1,26 @@
-package com.ws.match.model.domain;
+package com.ws.match.model.vo;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
-
-import lombok.Data;
+import java.util.List;
 
 /**
- * 队伍
- *
- * @TableName team
+ * @Author: 王顺
+ * @Date: 2023/6/2 16:22
+ * @Version 1.0
+ * @Description 队伍和用户信息
  */
-@TableName(value = "team")
 @Data
-public class Team implements Serializable {
+public class TeamUserVO implements Serializable {
 
+    private static final long serialVersionUID = -3334804139950519976L;
     /**
      * id
      */
-    @TableId(type = IdType.AUTO)
     private Long id;
 
     /**
@@ -52,10 +53,6 @@ public class Team implements Serializable {
      */
     private Integer status;
 
-    /**
-     * 密码
-     */
-    private String password;
 
     /**
      * 创建时间
@@ -63,15 +60,12 @@ public class Team implements Serializable {
     private Date createTime;
 
     /**
-     *
+     * 更新时间
      */
     private Date updateTime;
-
     /**
-     * 是否删除
+     * 创建人信息
      */
-    @TableLogic
-    private Integer isDelete;
+    private UserVO createUser;
 
-    private static final long serialVersionUID = 4594082349833287590L;
 }
