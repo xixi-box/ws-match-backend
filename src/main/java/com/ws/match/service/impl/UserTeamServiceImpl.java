@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserTeamServiceImpl extends ServiceImpl<UserTeamMapper, UserTeam>
     implements UserTeamService {
-
 }
 
 

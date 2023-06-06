@@ -11,6 +11,7 @@ import com.ws.match.model.domain.User;
 import com.ws.match.model.dto.TeamQuery;
 import com.ws.match.model.request.TeamAddRequest;
 import com.ws.match.model.request.TeamJoinRequest;
+import com.ws.match.model.request.TeamQuitRequest;
 import com.ws.match.model.request.TeamUpdateRequest;
 import com.ws.match.model.vo.TeamUserVO;
 import com.ws.match.service.TeamService;
@@ -54,21 +55,20 @@ public class TeamController {
     }
 
     /**
-     * 删除
-     *
      * @param team
      * @return
+     * @Description 解散队伍
      */
     @PostMapping("/delete")
-    public BaseResponse<Boolean> deleteTeam(@RequestBody Long id) {
+    public BaseResponse<Boolean> deleteTeam(@RequestBody Long id, HttpServletRequest request) {
 
         if (id < 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
 
         }
-        boolean b = teamService.removeById(id);
-
-        if (!b) {
+        User loginUser = userService.getLoginUser(request);
+        boolean result = teamService.deleteTeam(id, loginUser);
+        if (!result) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "删除失败");
         }
         return ResultUtils.success(true);
@@ -154,5 +154,21 @@ public class TeamController {
         return ResultUtils.success(result);
     }
 
+    /**
+     * @param teamQuitRequest
+     * @param request
+     * @return
+     * @Description 退出队伍
+     */
+    @PostMapping("/quit")
+    public BaseResponse<Boolean> quitTeam(@RequestBody TeamQuitRequest teamQuitRequest, HttpServletRequest request) {
+        if (teamQuitRequest == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+
+        }
+        User loginUser = userService.getLoginUser(request);
+        boolean result = teamService.quitTeam(teamQuitRequest, loginUser);
+        return ResultUtils.success(result);
+    }
 
 }

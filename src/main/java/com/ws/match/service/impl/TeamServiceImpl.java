@@ -286,6 +286,7 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
         if (TeamStatusEnum.PRIVATE.equals(teamStatusEnum)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "禁止加入私有队伍");
         }
+
         //如果是加密队伍 需要核对密码
         String password = teamJoinRequest.getPassword();
         if (TeamStatusEnum.SECRET.equals(teamStatusEnum)) {
@@ -293,10 +294,12 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
                 throw new BusinessException(ErrorCode.PARAMS_ERROR, "密码错误");
             }
         }
+
+
         // 该用户已加入的队伍数量
         long userId = loginUser.getId();
         // 只有一个线程能获取到锁
-        RLock lock = redissonClient.getLock("yupao:join_team");
+        RLock lock = redissonClient.getLock("match:join_team");
         try {
             // 抢到锁并执行
             while (true) {
@@ -345,6 +348,7 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
      * @param teamQuitRequest
      * @param loginUser
      * @return
+     * @Description 退出队伍
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -352,17 +356,22 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
         if (teamQuitRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
+
         Long teamId = teamQuitRequest.getTeamId();
+        //获得当前队伍
         Team team = getTeamById(teamId);
+        //获取当前用户ID
         long userId = loginUser.getId();
         UserTeam queryUserTeam = new UserTeam();
         queryUserTeam.setTeamId(teamId);
         queryUserTeam.setUserId(userId);
+        //查询
         QueryWrapper<UserTeam> queryWrapper = new QueryWrapper<>(queryUserTeam);
         long count = userTeamService.count(queryWrapper);
         if (count == 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "未加入队伍");
         }
+        //获取当前加入的人数
         long teamHasJoinNum = this.countTeamUserByTeamId(teamId);
         // 队伍只剩一人，解散
         if (teamHasJoinNum == 1) {
@@ -375,18 +384,24 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
                 // 把队伍转移给最早加入的用户
                 // 1. 查询已加入队伍的所有用户和加入时间
                 QueryWrapper<UserTeam> userTeamQueryWrapper = new QueryWrapper<>();
+                //查询队伍ID
                 userTeamQueryWrapper.eq("teamId", teamId);
+                //找到俩人
                 userTeamQueryWrapper.last("order by id asc limit 2");
                 List<UserTeam> userTeamList = userTeamService.list(userTeamQueryWrapper);
+
                 if (CollectionUtils.isEmpty(userTeamList) || userTeamList.size() <= 1) {
                     throw new BusinessException(ErrorCode.SYSTEM_ERROR);
                 }
+                //获取除队长外第一个人的ID 得到用户关系
                 UserTeam nextUserTeam = userTeamList.get(1);
+                //
                 Long nextTeamLeaderId = nextUserTeam.getUserId();
                 // 更新当前队伍的队长
                 Team updateTeam = new Team();
                 updateTeam.setId(teamId);
                 updateTeam.setUserId(nextTeamLeaderId);
+                //获取更新结果
                 boolean result = this.updateById(updateTeam);
                 if (!result) {
                     throw new BusinessException(ErrorCode.SYSTEM_ERROR, "更新队伍队长失败");
@@ -397,6 +412,12 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
         return userTeamService.remove(queryWrapper);
     }
 
+    /**
+     * @param id
+     * @param loginUser
+     * @return
+     * @Description 队长解散队伍
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean deleteTeam(long id, User loginUser) {
@@ -436,10 +457,9 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
     }
 
     /**
-     * 获取某队伍当前人数
-     *
      * @param teamId
      * @return
+     * @Description 获取某队伍当前人数
      */
     private long countTeamUserByTeamId(long teamId) {
         QueryWrapper<UserTeam> userTeamQueryWrapper = new QueryWrapper<>();

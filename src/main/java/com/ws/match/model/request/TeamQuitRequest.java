@@ -8,6 +8,7 @@ import java.io.Serializable;
  * @Author: 王顺
  * @Date: 2023/6/2 16:25
  * @Version 1.0
+ * @Description 用户退出队伍
  */
 @Data
 public class TeamQuitRequest implements Serializable {
