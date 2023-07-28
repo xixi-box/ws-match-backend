@@ -3,6 +3,7 @@ package com.ws.match.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ws.match.model.domain.User;
+import com.ws.match.model.vo.UserVO;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -62,11 +63,12 @@ public interface UserService extends IService<User> {
     User getLoginUser(HttpServletRequest request);
 
     /**
-     *
      * @param request
      * @return
      */
     boolean isAdmin(HttpServletRequest request);
 
     boolean isAdmin(User loginUser);
+
+    List<User> matchUsers(long num, User loginUser);
 }

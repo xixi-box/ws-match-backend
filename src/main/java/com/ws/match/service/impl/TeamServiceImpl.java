@@ -19,6 +19,7 @@ import com.ws.match.model.vo.UserVO;
 import com.ws.match.service.TeamService;
 import com.ws.match.service.UserService;
 import com.ws.match.service.UserTeamService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.redisson.api.RLock;
@@ -41,6 +42,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Service
 @SuppressWarnings("all")
+@Slf4j
 public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
         implements TeamService {
 
@@ -74,13 +76,13 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
 
         }
         String name = team.getName();
-        if (StringUtils.isBlank(name) || name.length() >= 20) {
+        if (StringUtils.isBlank(name) || name.length() > 20) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "队伍名不符合要求");
 
         }
         String description = team.getDescription();
-        if (StringUtils.isNotBlank(description) || description.length() >= 512) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "队伍描述不符合要求");
+        if (StringUtils.isNotBlank(description) && description.length() > 512) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "队伍描述过长");
         }
         Integer statusEnum = Optional.ofNullable(team.getStatus()).orElse(0);
         TeamStatusEnum enumByValue = TeamStatusEnum.getEnumByValue(statusEnum);
@@ -149,6 +151,7 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
             if (id != null && id > 0) {
                 queryWrapper.eq("id", id);
             }
+            //查询加入的所有队伍
             List<Long> idList = teamQuery.getIdList();
             if (CollectionUtils.isNotEmpty(idList)) {
                 queryWrapper.in("id", idList);
@@ -181,8 +184,8 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
                 queryWrapper.eq("userId", userId);
             }
 
-
             // 根据状态来查询  只有管理员才能查询加密房间
+
             Integer status = teamQuery.getStatus();
             TeamStatusEnum statusEnum = TeamStatusEnum.getEnumByValue(status);
             if (statusEnum == null) {
@@ -193,8 +196,6 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
             }
             queryWrapper.eq("status", statusEnum.getValue());
         }
-
-
         // 不展示已过期的队伍
         // expireTime is null or expireTime > now()  过滤掉过期队伍
         queryWrapper.and(qw -> qw.gt("expireTime", new Date()).or().isNull("expireTime"));
@@ -428,6 +429,7 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
         if (team.getUserId() != loginUser.getId()) {
             throw new BusinessException(ErrorCode.NO_AUTH, "无访问权限");
         }
+
         // 移除所有加入队伍的关联信息
         QueryWrapper<UserTeam> userTeamQueryWrapper = new QueryWrapper<>();
         userTeamQueryWrapper.eq("teamId", teamId);

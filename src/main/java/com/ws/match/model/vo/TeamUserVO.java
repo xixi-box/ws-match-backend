@@ -1,12 +1,10 @@
 package com.ws.match.model.vo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
+
 import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 /**
  * @Author: 王顺
@@ -67,5 +65,11 @@ public class TeamUserVO implements Serializable {
      * 创建人信息
      */
     private UserVO createUser;
+
+    /**
+     * 是否加入队伍
+     */
+
+    private boolean hasJoin = false;
 
 }

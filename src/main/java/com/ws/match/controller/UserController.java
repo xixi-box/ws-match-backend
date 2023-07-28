@@ -9,6 +9,7 @@ import com.ws.match.exception.BusinessException;
 import com.ws.match.model.domain.User;
 import com.ws.match.model.request.UserLoginRequest;
 import com.ws.match.model.request.UserRegisterRequest;
+import com.ws.match.model.vo.UserVO;
 import com.ws.match.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -40,7 +41,7 @@ public class UserController {
     @Resource
     private UserService userService;
     @Resource
-    private RedisTemplate<String,Object> redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
     @PostMapping("/register")
     public BaseResponse<Long> userRegister(@RequestBody UserRegisterRequest userRegisterRequest) {
@@ -89,7 +90,6 @@ public class UserController {
 
     @GetMapping("/current")
     public BaseResponse<User> getCurrentUser(HttpServletRequest request) {
-
         Object attribute = request.getSession().getAttribute(USER_LOGIN_STATE);
         User currentUser = (User) attribute;
         if (currentUser == null) {
@@ -163,6 +163,7 @@ public class UserController {
         User loginUser = userService.getLoginUser(request);
         String redisKey = String.format("match:user:recommend:%s", loginUser.getId());
         ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
+
         // 如果有缓存，直接读缓存
         Page<User> userPage = (Page<User>) valueOperations.get(redisKey);
         if (userPage != null) {
@@ -180,4 +181,19 @@ public class UserController {
         return ResultUtils.success(userPage);
     }
 
+    /**
+     * 获取最匹配的用户
+     *
+     * @param num
+     * @param request
+     * @return
+     */
+    @GetMapping("/match")
+    public BaseResponse<List<User>> matchUsers(long num, HttpServletRequest request) {
+        if (num <= 0 || num > 20) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        User user = userService.getLoginUser(request);
+        return ResultUtils.success(userService.matchUsers(num, user));
+    }
 }
