@@ -194,7 +194,16 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
             if (!isAdmin && statusEnum.equals(TeamStatusEnum.PRIVATE)) {
                 throw new BusinessException(ErrorCode.NO_AUTH);
             }
+            //如果是管理员,三种状态的队伍都可以查看
+//            if (isAdmin) {
+//                queryWrapper.eq("status", TeamStatusEnum.PUBLIC.getValue())
+//                        .or()
+//                        .eq("status", TeamStatusEnum.PRIVATE.getValue())
+//                        .or()
+//                        .eq("status", TeamStatusEnum.SECRET.getValue());
+//            }
             queryWrapper.eq("status", statusEnum.getValue());
+
         }
         // 不展示已过期的队伍
         // expireTime is null or expireTime > now()  过滤掉过期队伍
@@ -295,7 +304,6 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
                 throw new BusinessException(ErrorCode.PARAMS_ERROR, "密码错误");
             }
         }
-
 
         // 该用户已加入的队伍数量
         long userId = loginUser.getId();
